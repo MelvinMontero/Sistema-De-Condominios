@@ -377,6 +377,28 @@ namespace DataModels
 		}
 
 		#endregion
+
+		#region SpObtenerCobros
+
+		public static IEnumerable<SpObtenerCobrosResult> SpObtenerCobros(this PviProyectoFinalDB dataConnection)
+		{
+			return dataConnection.QueryProc<SpObtenerCobrosResult>("[dbo].[sp_ObtenerCobros]");
+		}
+
+		public partial class SpObtenerCobrosResult
+		{
+			[Column("id_cobro")   ] public int    Id_cobro    { get; set; }
+			[Column("id_casa")    ] public int    Id_casa     { get; set; }
+			[Column("nombre_casa")] public string Nombre_casa { get; set; }
+			[Column("id_persona") ] public int    Id_persona  { get; set; }
+			[Column("nombre")     ] public string Nombre      { get; set; }
+			[Column("apellido")   ] public string Apellido    { get; set; }
+			[Column("mes")        ] public int    Mes         { get; set; }
+			[Column("anno")       ] public int    Anno        { get; set; }
+			[Column("estado")     ] public string Estado      { get; set; }
+		}
+
+		#endregion
 	}
 
 	public static partial class TableExtensions
