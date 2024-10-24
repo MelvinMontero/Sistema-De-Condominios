@@ -31,14 +31,38 @@ namespace SistemaDeCondominios.Controllers
             }
             return View(cobros);
         }
-        public ActionResult CrearCobro(int? idCobro)
+        [HttpPost]
+        public ActionResult CrearCobro(CobroModel cobro)
         {
-            var cobros = new List<CobroModel>();
+            string resultado = string.Empty;
+            try
+            {
+                using (var db = new PviProyectoFinalDB("MyDatabase"))
+                {
+                    cobro = db.SpCrearCobro(cobro.idPersona, cobro.idCasa, cobro.anno, cobro.mes, cobro.idServicio)
+            }
+            }
+            
+            return View();
+        }
+        public JsonResult Clientes()
+        {
+            var list = new List<Dropdown>();
             using (var db = new PviProyectoFinalDB("MyDatabase"))
             {
-                
+                list = db.RetornarPersonas().Select(_ => new Dropdown { Id=_.IdPersona, Nombre=_.Nombre}).ToList();
             }
-            return View(cobros);
+            return Json(list);
         }
+        public JsonResult Casas()
+        {
+            var list = new List<Dropdown>();
+            using (var db = new PviProyectoFinalDB("MyDatabase"))
+            {
+                list = db.RetornarCasas().Select(_ => new Dropdown { Id = _.IdCasa, Nombre = _.NombreCasa }).ToList();
+            }
+            return Json(list);
+        }
+
     }
 }

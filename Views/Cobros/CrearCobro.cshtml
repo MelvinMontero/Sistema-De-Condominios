@@ -4,4 +4,42 @@
 }
 
 <h2>Crear Cobro</h2>
+<form method="post" id="CrearCobro">
+    <div class="mb-3">
+        <select id="idPersona" name="idPersona" class="form-control">
+            <option value="">Seleccione un Cliente</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <select id="idCasa" name="idCasa" class="form-control">
+            <option value="">Seleccione una casa</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="Anno">Año:</label>
+        <select class="form-control" id="Anno" name="Anno">
+            @for (int year = 2000; year <= DateTime.Now.Year; year++)
+            {
+                <option value="@year">@year</option>
+            }
+        </select>
+    </div>
 
+    <div class="mb-3">
+        <label class="form-label" for="Mes">Mes:</label>
+        <select class="form-control" id="Mes" name="Mes">
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+        </select>
+    </div>
+</form>

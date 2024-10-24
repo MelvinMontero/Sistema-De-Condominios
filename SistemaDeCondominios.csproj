@@ -262,6 +262,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CobroModel.cs" />
+    <Compile Include="Models\Dropdown.cs" />
     <Compile Include="Models\MyDatabase1.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

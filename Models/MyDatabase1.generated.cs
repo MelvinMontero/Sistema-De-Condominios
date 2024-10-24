@@ -271,6 +271,24 @@ namespace DataModels
 
 	public static partial class PviProyectoFinalDBStoredProcedures
 	{
+		#region RetornarCasas
+
+		public static IEnumerable<Casa> RetornarCasas(this PviProyectoFinalDB dataConnection)
+		{
+			return dataConnection.QueryProc<Casa>("[dbo].[RetornarCasas]");
+		}
+
+		#endregion
+
+		#region RetornarPersonas
+
+		public static IEnumerable<Persona> RetornarPersonas(this PviProyectoFinalDB dataConnection)
+		{
+			return dataConnection.QueryProc<Persona>("[dbo].[RetornarPersonas]");
+		}
+
+		#endregion
+
 		#region SpAutenticarUsuario
 
 		public static IEnumerable<SpAutenticarUsuarioResult> SpAutenticarUsuario(this PviProyectoFinalDB dataConnection, string @email, string @contrasena)

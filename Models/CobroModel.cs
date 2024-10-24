@@ -8,6 +8,7 @@ namespace SistemaDeCondominios.Models
     public class CobroModel
     {
         public int idCobro { get; set; }
+        public int idCasa { get; set; }
         public string nombreCasa { get; set; }
         public int idPersona { get; set; }
         public string nombrePersona { get; set; }
