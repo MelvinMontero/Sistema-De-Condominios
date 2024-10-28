@@ -313,6 +313,7 @@ namespace DataModels
 			[Column("id_persona")  ] public int    Id_persona   { get; set; }
 			[Column("nombre")      ] public string Nombre       { get; set; }
 			[Column("apellido")    ] public string Apellido     { get; set; }
+			[Column("email")       ] public string Email        { get; set; }
 			[Column("contrasena")  ] public string Contrasena   { get; set; }
 			[Column("tipo_persona")] public string Tipo_persona { get; set; }
 			[Column("estado")      ] public bool?  Estado       { get; set; }

@@ -1,0 +1,45 @@
+﻿@model SistemaDeCondominios.Models.PersonaModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Autenticación</h2>
+<form method="post" id="Autenticacion">
+    <div class="mb-3">
+        <label class="form-label" for="Email">Email:</label>
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="Clave">Constraseña</label>
+        @Html.TextBoxFor(model => model.Clave, new { @class = "form-control" })
+    </div>
+    @if (ViewBag.Mensaje != null)
+    {
+        <div class="text-danger">@ViewBag.Mensaje</div>
+    }
+    <input type="submit" class="btn btn-primary" value="Ingresar" />
+</form>
+@Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+    $("#Autenticacion").validate({
+        rules: {
+            'Email': {
+                required: true
+            },
+            'Clave': {
+                required: true
+            }
+        },
+        messages: {
+            'Email': {
+                required: "El campo Email es obligatorio."
+            },
+            'Clave': {
+                required: "El campo Contraseña es obligatorio."
+            }
+        },
+        errorClass: "text-danger"
+    });
+</script>
+

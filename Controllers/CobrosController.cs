@@ -39,7 +39,7 @@ namespace SistemaDeCondominios.Controllers
             {
                 using (var db = new PviProyectoFinalDB("MyDatabase"))
                 {
-                    cobro = db.SpCrearCobro(cobro.idPersona, cobro.idCasa, cobro.anno, cobro.mes, cobro.idServicio)
+                    cobro = db.SpCrearCobro(cobro.idPersona, cobro.idCasa, cobro.anno, cobro.mes, cobro.idServicio);
             }
             }
             
