@@ -2,27 +2,31 @@
 @{
     ViewBag.Title = "Index";
 }
-@Html.ActionLink("Nuevo Cobro", "CrearCobro", null, new { @class = "btn btn-primary" })
-<h2>Gestionar Cobros</h2>
-<table class="table table-hover table-bordered">
-    <tr>
-        <th># Cobro</th>
-        <th># Casa</th>
-        <th>Propietario</th>
-        <th>Período</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-    </tr>
-    <tbody>
-        @foreach (var cobros in Model)
-        {
-            <tr>
-                <td>@cobros.idCobro</td>
-                <td>@cobros.nombreCasa</td>
-                <td>@cobros.nombrePersona @cobros.apellidoPersona</td>
-                <td>@cobros.anno - @cobros.mes</td>
-                <td></td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if (Session["EsEmpleado"] == "Empleado") // Verifica si hay una sesión activa
+{
+    
+}
+    @Html.ActionLink("Nuevo Cobro", "CrearCobro", null, new { @class = "btn btn-primary" })
+    <h2>Gestionar Cobros</h2>
+    <table class="table table-hover table-bordered">
+        <tr>
+            <th># Cobro</th>
+            <th># Casa</th>
+            <th>Propietario</th>
+            <th>Período</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        <tbody>
+            @foreach (var cobros in Model)
+            {
+                <tr>
+                    <td>@cobros.idCobro</td>
+                    <td>@cobros.nombreCasa</td>
+                    <td>@cobros.nombrePersona @cobros.apellidoPersona</td>
+                    <td>@cobros.anno - @cobros.mes</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>

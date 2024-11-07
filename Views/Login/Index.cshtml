@@ -4,7 +4,7 @@
 }
 
 <h2>Autenticación</h2>
-<form method="post" id="Autenticacion">
+<form method="post" action="@Url.Action("Autenticacion","Autenticacion")" id="Autenticacion">
     <div class="mb-3">
         <label class="form-label" for="Email">Email:</label>
         @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
@@ -42,4 +42,7 @@
         errorClass: "text-danger"
     });
 </script>
+
+
+
 

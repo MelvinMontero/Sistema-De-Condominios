@@ -19,8 +19,17 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    @if (Session["idPersona"] != null) // Verifica si hay una sesión activa
+                    {
+                        <li>@Html.ActionLink("Cobros", "Index", "Cobros", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Cerrar Sesión", "LogOut","Login", new { @class ="btn btn-secondary"})</li>
+                    }
+                    else 
+                    { 
+                        <li>@Html.ActionLink("Ingresar", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+                    }
+                    
+                    
                 </ul>
             </div>
         </div>

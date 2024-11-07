@@ -8,12 +8,13 @@ using System.Web.Mvc;
 
 namespace SistemaDeCondominios.Controllers
 {
-    public class AutenticacionController : Controller
+    public class LoginController : Controller
     {
         public ActionResult Index()
         {
             return View();
         }
+        [HttpPost]
         public ActionResult Autenticacion(PersonaModel model)
         {
             try
@@ -45,6 +46,13 @@ namespace SistemaDeCondominios.Controllers
                 ViewBag.Mensaje = "Algo ha salido mal:" + ex;
             }
             return View(model);
+        }
+        [HttpPost]
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            Session.Abandon();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
