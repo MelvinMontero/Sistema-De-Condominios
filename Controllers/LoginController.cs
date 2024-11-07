@@ -1,18 +1,21 @@
 ﻿using DataModels;
-using SistemaDeCondominios.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SistemaDeCondominios.Models;
+using static DataModels.PviProyectoFinalDBStoredProcedures;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
 
 namespace SistemaDeCondominios.Controllers
 {
     public class LoginController : Controller
     {
-        public ActionResult Index()
+        
+        public ActionResult Login()
         {
-            return View();
+            return View(new PersonaModel());
         }
         [HttpPost]
         public ActionResult Autenticacion(PersonaModel model)
@@ -46,13 +49,6 @@ namespace SistemaDeCondominios.Controllers
                 ViewBag.Mensaje = "Algo ha salido mal:" + ex;
             }
             return View(model);
-        }
-        [HttpPost]
-        public ActionResult Logout()
-        {
-            Session.Clear();
-            Session.Abandon();
-            return RedirectToAction("Index", "Home");
         }
     }
 }

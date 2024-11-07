@@ -22,14 +22,14 @@
                     @if (Session["idPersona"] != null) // Verifica si hay una sesión activa
                     {
                         <li>@Html.ActionLink("Cobros", "Index", "Cobros", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Cerrar Sesión", "LogOut","Login", new { @class ="btn btn-secondary"})</li>
+                        <li>@Html.ActionLink("Cerrar Sesión", "LogOut", "Login", new { @class = "nav-link" })</li>
                     }
-                    else 
-                    { 
-                        <li>@Html.ActionLink("Ingresar", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+                    else
+                    {
+                        <li>@Html.ActionLink("Iniciar sesión", "Index", "Login", new { @class = "nav-link" })</li>
                     }
-                    
-                    
+
+
                 </ul>
             </div>
         </div>

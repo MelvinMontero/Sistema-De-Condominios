@@ -25,7 +25,10 @@
                     <td>@cobros.nombreCasa</td>
                     <td>@cobros.nombrePersona @cobros.apellidoPersona</td>
                     <td>@cobros.anno - @cobros.mes</td>
-                    <td></td>
+                    <td>@cobros.estado</td>
+                    <td>
+                        @Html.ActionLink("Consultar", "ConsultarCobro", "Cobro", new { Id = cobros.idCobro }, new { @class = "btn btn-primary me-2" })
+                    </td>
                 </tr>
             }
         </tbody>

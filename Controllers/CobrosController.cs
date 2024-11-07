@@ -31,6 +31,11 @@ namespace SistemaDeCondominios.Controllers
             }
             return View(cobros);
         }
+        public ActionResult ConsultarCobro(int? idCobro)
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult CrearCobro(CobroModel cobro)
         {
@@ -40,9 +45,12 @@ namespace SistemaDeCondominios.Controllers
                 using (var db = new PviProyectoFinalDB("MyDatabase"))
                 {
                     cobro = db.SpCrearCobro(cobro.idPersona, cobro.idCasa, cobro.anno, cobro.mes, cobro.idServicio);
+                }
             }
-            }
+            catch (Exception ex) 
+            { 
             
+            }
             return View();
         }
         public JsonResult Clientes()
