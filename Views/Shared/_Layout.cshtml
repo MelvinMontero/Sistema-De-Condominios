@@ -21,12 +21,20 @@
                     <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     @if (Session["idPersona"] != null) // Verifica si hay una sesión activa
                     {
-                        <li>@Html.ActionLink("Cobros", "Index", "Cobros", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Cerrar Sesión", "LogOut", "Login", new { @class = "nav-link" })</li>
+                        if (Session["EsEmpleado"]?.ToString() == "Empleado")//Importante para mostrar diferentes vistas dependiendo de si es empleado o no
+                        {
+                            <li>@Html.ActionLink("Gestionar Cobros", "Index", "Cobros", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Gestionar Servicios", "", "", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Mis Cobros", "Index", "Cobros", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                        <li>@Html.ActionLink("Cerrar Sesión", "LogOut", "Login", new { area = "" }, new { @class = "nav-link" })</li>
                     }
                     else
                     {
-                        <li>@Html.ActionLink("Iniciar sesión", "Index", "Login", new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Iniciar Sesión", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
                     }
 
 

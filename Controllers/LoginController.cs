@@ -13,9 +13,9 @@ namespace SistemaDeCondominios.Controllers
     public class LoginController : Controller
     {
         
-        public ActionResult Login()
+        public ActionResult Index()
         {
-            return View(new PersonaModel());
+            return View();
         }
         [HttpPost]
         public ActionResult Autenticacion(PersonaModel model)
@@ -24,7 +24,7 @@ namespace SistemaDeCondominios.Controllers
             {
                 using (var db = new PviProyectoFinalDB("MyDatabase"))
                 {
-                    var persona = db.SpAutenticarUsuario(model.Email, model.Clave).FirstOrDefault(_ => _.Estado == true);
+                    var persona = db.SpAutenticarUsuario(model.Email, model.Clave).FirstOrDefault();
                     if (persona != null)
                     {
                         model.IdPersona = persona.Id_persona;
@@ -36,6 +36,7 @@ namespace SistemaDeCondominios.Controllers
                         Session["NombreCompleto"] = $"{persona.Nombre}{persona.Apellido}";
                         Session["Email"] = persona.Email;
                         Session["EsEmpleado"] = persona.Tipo_persona;
+                        return RedirectToAction("Index","Cobros");
                     }
                     else
                     {

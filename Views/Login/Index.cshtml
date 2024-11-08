@@ -4,7 +4,7 @@
 }
 <h2>Autenticación</h2>
 
-<form method="post" id="Autenticacion">
+<form method="post" action="/Login/Autenticacion" id="Autenticacion">
     <div class="mb-3">
         <label class="form-label" for="Email">Email:</label>
         @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
@@ -18,7 +18,6 @@
     {
         <div class="text-danger">@ViewBag.Mensaje</div>
     }
-
     <input type="submit" class="btn btn-primary" value="Ingresar" />
 </form>
 
@@ -28,8 +27,7 @@
 $("#Autenticacion").validate({
             rules: {
                 'Email': {
-                    required: true,
-                    email: true
+                    required: true
                 },
                 'Clave': {
                     required: true
@@ -37,13 +35,13 @@ $("#Autenticacion").validate({
             },
             messages: {
                 'Email': {
-                    required: "El campo Email es obligatorio.",
-                    email: "Debe ingresar un correo electrónico válido."
+                    required: "El campo Email es obligatorio."
                 },
                 'Clave': {
                     required: "El campo Contraseña es obligatorio."
                 }
             },
             errorClass: "text-danger"
-        });</script>
+});
+    </script>
 }

@@ -2,34 +2,138 @@
 @{
     ViewBag.Title = "Index";
 }
-@if (Session["EsEmpleado"] == "Empleado") // Verifica si hay una sesión activa
+@if (Session["EsEmpleado"]?.ToString() == "Empleado")//Importante para mostrar diferentes vistas dependiendo de si es empleado o no
 {
-    
-}
-    @Html.ActionLink("Nuevo Cobro", "CrearCobro", null, new { @class = "btn btn-primary" })
     <h2>Gestionar Cobros</h2>
-    <table class="table table-hover table-bordered">
-        <tr>
-            <th># Cobro</th>
-            <th># Casa</th>
-            <th>Propietario</th>
-            <th>Período</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-        <tbody>
-            @foreach (var cobros in Model)
-            {
-                <tr>
-                    <td>@cobros.idCobro</td>
-                    <td>@cobros.nombreCasa</td>
-                    <td>@cobros.nombrePersona @cobros.apellidoPersona</td>
-                    <td>@cobros.anno - @cobros.mes</td>
-                    <td>@cobros.estado</td>
-                    <td>
-                        @Html.ActionLink("Consultar", "ConsultarCobro", "Cobro", new { Id = cobros.idCobro }, new { @class = "btn btn-primary me-2" })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="form-row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="idPersona">Nombre del Cliente:</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="mesCobro">Mes de Cobro:</label>
+                </div>
+                <div class="col-md-3">
+                    <label for="annoCobro">Año de Cobro:</label>
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <select id="idPersona" name="idPersona" class="form-control">
+                        <option value="">Seleccione un Cliente</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" id="mesCobro" name="mesCobro" class="form-control" placeholder="Mes (1-12)" min="1" max="12" />
+                </div>
+                <div class="col-md-3">
+                    <input type="number" id="annoCobro" name="annoCobro" class="form-control" placeholder="Año" />
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <button id="btnFiltrar" class="btn btn-secondary">Filtrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h2>Mis Cobros</h2>
+}
+@Html.ActionLink("Nuevo Cobro", "CrearCobro", null, new { @class = "btn btn-primary" })
+
+<table class="table table-hover table-bordered">
+    <tr>
+        <th># Cobro</th>
+        <th># Casa</th>
+        <th>Propietario</th>
+        <th>Período</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    <tbody>
+        @foreach (var cobros in Model)
+        {
+            <tr>
+                <td>@cobros.idCobro</td>
+                <td>@cobros.nombreCasa</td>
+                <td>@cobros.nombrePersona @cobros.apellidoPersona</td>
+                <td>@cobros.anno - @cobros.mes</td>
+                <td>@cobros.estado</td>
+                <td>
+                    @Html.ActionLink("Consultar", "ConsultarCobro", "Cobro", new { Id = cobros.idCobro }, new { @class = "btn btn-primary me-2" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function loadDropdown(url, parametros, ddl, selected) {
+            $.post(url, parametros, function (data) {
+                ddl.empty();
+                ddl.append("<option value=''>Seleccione un Cliente</option>");
+                $(data).each(function () {
+                    var option = new Option(this.Nombre, this.Id);
+                    if (this.Id == selected) {
+                        option.selected = true;
+                    }
+                    ddl.append(option);
+                });
+            });
+        }
+        $(document).ready(function () {
+            loadDropdown("/Cobros/Clientes", {}, $("#idPersona"));
+        });
+
+        $(document).ready(function () {
+            $("#btnFiltrar").click(function () {
+                const idPersona = $("#idPersona").val();
+                const mesCobro = $("#mesCobro").val();
+                const annoCobro = $("#annoCobro").val();
+                if (!idPersona && !mesCobro && !annoCobro) {
+                    window.location.href = "/Cobros/Index";
+                    return;
+                }
+                $.ajax({
+                    url: "/Cobros/FiltrarCobros",
+                    type: "POST",
+                    data: {
+                        idPersona: idPersona,
+                        mesCobro: mesCobro,
+                        annoCobro: annoCobro
+                    },
+                    success: function (data) {
+                        // Reemplazar el contenido de la tabla con los resultados
+                        $("tbody").empty();
+                        if (data.length === 0) {
+                            $("tbody").append("<tr><td colspan='6'>No se encontraron resultados</td></tr>");
+                        } else {
+                            $(data).each(function () {
+                                const row = `
+                            <tr>
+                                <td>${this.idCobro}</td>
+                                <td>${this.nombreCasa}</td>
+                                <td>${this.nombrePersona} ${this.apellidoPersona}</td>
+                                <td>${this.anno} - ${this.mes}</td>
+                                <td>${this.estado}</td>
+                                <td>
+                                    <a href="/Cobros/Index/${this.idCobro}" class="btn btn-primary me-2">Consultar</a>
+                                </td>
+                            </tr>`;
+                                $("tbody").append(row);
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert("Debe rellenar todos los campos para filtrar.");
+                    }
+                });
+            });
+        });
+    </script>
+}
