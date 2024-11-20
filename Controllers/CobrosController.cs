@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static DataModels.PviProyectoFinalDBStoredProcedures;
 
 namespace SistemaDeCondominios.Controllers
 {
@@ -13,10 +14,26 @@ namespace SistemaDeCondominios.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            if (Session["idPersona"] == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
             var cobros = new List<CobroModel>();
             using (var db = new PviProyectoFinalDB("MyDatabase"))
             {
-                var spResult = db.SpObtenerCobros().ToList();
+                List<SpObtenerCobrosResult> spResult = new List<SpObtenerCobrosResult>();
+                if (Session["EsEmpleado"]?.ToString() == "Empleado")
+                {
+                     spResult = db.SpObtenerCobros(null).ToList();
+                }
+                else if (Session["EsEmpleado"]?.ToString() != "Empleado")
+                {
+                    int idPersona = Convert.ToInt32(Session["idPersona"]);
+                    spResult = db.SpObtenerCobros(idPersona).ToList();
+                }
+                
+                    
+
                 cobros = spResult.Select(c  => new CobroModel 
                 { 
                     idCobro = c.Id_cobro,
@@ -59,7 +76,7 @@ namespace SistemaDeCondominios.Controllers
             var cobros = new List<CobroModel>();
             using (var db = new PviProyectoFinalDB("MyDatabase"))
             {
-                var spResult = db.SpObtenerCobros().ToList();
+                var spResult = db.SpObtenerCobros(null).ToList();
 
                 if (!string.IsNullOrEmpty(idPersona))
                 {

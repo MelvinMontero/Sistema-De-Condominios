@@ -51,5 +51,27 @@ namespace SistemaDeCondominios.Controllers
             }
             return View(model);
         }
+        public ActionResult LogOut()
+        {
+            Session.Clear();
+            Session.Abandon();
+            if (Request.Cookies[".ASPXAUTH"] != null)
+            {
+                var cookie = new HttpCookie(".ASPXAUTH")
+                {
+                    Expires = DateTime.Now.AddDays(-1),
+                    Value = "",
+                    HttpOnly = true
+                };
+                Response.Cookies.Add(cookie);
+            }
+
+            Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+
+            return RedirectToAction("Index", "Login");
+        }
+
     }
 }

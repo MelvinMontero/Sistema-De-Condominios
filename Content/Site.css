@@ -18,3 +18,22 @@ select,
 textarea {
     max-width: 280px;
 }
+table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+table th {
+    font-weight: bold;
+    text-align: center;
+}
+
+    table td:first-child, table th:first-child {
+        text-align: center;
+    }
+
+    table td:nth-child(3), table th:nth-child(3) {
+        text-align: left;
+    }
