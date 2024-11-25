@@ -1,0 +1,90 @@
+﻿@model SistemaDeCondominios.Models.CasasModel
+@{
+    ViewBag.Title = "ModificarCasa";
+}
+@if (Model == null)
+{
+    <h2>Casa no encontrada</h2>
+}
+else
+{
+    <h2>Modificar Casa</h2>
+
+    <form method="post" id="EditarCasa">
+        @Html.HiddenFor(model => model.IdCasa)
+
+        <div class="mb-3">
+            <label for="NombreCasa" class="form-label">Nombre de la Casa</label>
+            @Html.TextBoxFor(model => model.NombreCasa, new { @class = "form-control", maxlength = "50", required = "required", @readonly = "readonly" })
+        </div>
+
+        <div class="mb-3">
+            <label for="mtsCuadrados" class="form-label">Metros Cuadrados</label>
+            @Html.TextBoxFor(model => model.mtsCuadrados, new { @class = "form-control", required = "required", @readonly = "readonly" })
+        </div>
+
+        <div class="mb-3">
+            <label for="nHabitaciones" class="form-label">Número de Habitaciones</label>
+            @Html.TextBoxFor(model => model.nHabitaciones, new { @class = "form-control", min = "1", max = "8", required = "required" })
+        </div>
+
+        <div class="mb-3">
+            <label for="nBanos" class="form-label">Número de Baños</label>
+            @Html.TextBoxFor(model => model.nBanos, new { @class = "form-control", min = "1", max = "4", required = "required" })
+        </div>
+
+        <div class="mb-3">
+            <label for="IdCliente" class="form-label">Dueño</label>
+            <select id="IdCliente" name="IdCliente" class="form-control" disabled>
+                <option value="@Model.IdCliente">@Model.NombreCliente @Model.ApellidoCliente</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="FechaConstruccion" class="form-label">Fecha de Construcción</label>
+            @Html.TextBoxFor(model => model.FechaConstruccion, new { @class = "form-control", required = "required", @readonly = "readonly" })
+        </div>
+
+        @if (Model.Estado == false)
+        {
+            <div class="alert alert-warning">
+                <strong>La casa está inactiva y no puede ser modificada.</strong>
+            </div>
+
+        }
+        else if (Model.Estado == true && Model.EstadoCobro == "Pendiente")
+        {
+            <div class="alert alert-warning">
+                <strong>La casa tiene cobros pendientes, no puede ser modificada.</strong>
+            </div>
+        }
+        else
+        {
+            <input type="submit" class="btn btn-primary" value="Guardar" />
+            @Html.ActionLink("Inactivar", "InactivarCasa", "Casas", new { Id = Model.IdCasa }, new { @class = "btn btn-danger" })
+        }
+        <a href="@Url.Action("Index", "Casas")" class="btn btn-secondary">Volver</a>
+    </form>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+    <script type="text/javascript">
+
+        $("#EditarCasa").validate({
+            rules: {
+                'nHabitaciones': {
+                    required: true,
+                    min: 1,
+                    max: 8
+                },
+                'nBanos': {
+                    required: true,
+                    min: 1,
+                    max: 4
+                }
+            }
+        });
+       
+    </script>
+}

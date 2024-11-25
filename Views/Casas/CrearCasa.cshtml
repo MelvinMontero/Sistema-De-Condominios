@@ -1,0 +1,33 @@
+﻿<h2>Crear Casas</h2>
+<form method="post" id="CrearCasas">
+    <div class="mb-3">
+        <label for="nombreCasa" class="form-label">Nombre de la Casa</label>
+        <input type="text" id="nombreCasa"  class="form-control" maxlength="50" required />
+    </div>
+    <div class="mb-3">
+        <label for="mtsCuadrados" class="form-label">Metros Cuadrados</label>
+        <input type="number" id="mtsCuadrados" class="form-control" step="0.01" required />
+    </div>
+    <div class="mb-3">
+        <label for="nHabitaciones" class="form-label">Número de Habitaciones</label>
+        <input type="number" id="nHabitaciones"  class="form-control" min="1" max="8" required />
+    </div>
+    <div class="mb-3">
+        <label for="nBanos" class="form-label">Número de Baños</label>
+        <input type="number" id="nBanos"  class="form-control" min="1" max="4" required />
+    </div>
+    <div class="mb-3">
+        <label for="idCliente" class="form-label">Dueño</label>
+        <select id="idCliente" name="idCliente" class="form-control" required>
+            <option value="">Seleccione un dueño</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="fechaConstruccion" class="form-label">Fecha de Construcción</label>
+        <input type="text" id="fechaConstruccion"  class="form-control" required />
+    </div>
+    <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+
+    <input type="submit" class="btn btn-primary" value="Guardar">
+    @Html.ActionLink("Regresar", "Index", "Casas", new { @class = "btn btn-secondary" })
+</form>

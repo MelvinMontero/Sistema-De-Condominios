@@ -31,8 +31,6 @@ namespace SistemaDeCondominios.Controllers
                     int idPersona = Convert.ToInt32(Session["idPersona"]);
                     spResult = db.SpObtenerCobros(idPersona).ToList();
                 }
-                
-                    
 
                 cobros = spResult.Select(c  => new CobroModel 
                 { 
@@ -64,7 +62,7 @@ namespace SistemaDeCondominios.Controllers
                     //cobro = db.SpCrearCobro(cobro.idPersona, cobro.idCasa, cobro.anno, cobro.mes, cobro.idServicio);
                 }
             }
-            catch (Exception ex) 
+            catch
             { 
             
             }

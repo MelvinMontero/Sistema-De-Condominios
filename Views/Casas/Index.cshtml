@@ -1,0 +1,163 @@
+﻿@model List<SistemaDeCondominios.Models.CasasModel>
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Gestionar Casas</h2>
+<button id="AbrirModal" class="btn btn-primary">Nueva Casa</button>
+
+<table class="table table-hover table-bordered">
+    <tr>
+        <th>Nombre de la Casa</th>
+        <th>Mts. Cuadrados</th>
+        <th>Núm. Habitaciones</th>
+        <th>Núm. Baños</th>
+        <th>Propietario</th>
+        <th>Fecha Construccion</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    <tbody>
+        @foreach (var casas in Model)
+        {
+            <tr>
+                <td>@casas.NombreCasa</td>
+                <td>@casas.mtsCuadrados</td>
+                <td>@casas.nHabitaciones</td>
+                <td>@casas.nBanos</td>
+                <td>@casas.NombreCliente @casas.ApellidoCliente</td>
+                <td>@casas.FechaConstruccion</td>
+                <td>@(casas.Estado == true ? "Activa" : "Inactiva")</td>
+                <td>
+                    @Html.ActionLink("Modificar", "ModificarCasa", "Casas", new { Id = casas.IdCasa }, new { @class = "btn btn-primary me-2" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="dialog" title="Crear Casa">
+    @Html.Partial("CrearCasa")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $("#CrearCasas").validate({
+            rules: {
+                nombreCasa: {
+                    required: true,
+                    maxlength: 50
+                },
+                mtsCuadrados: {
+                    required: true,
+                    number: true,
+                    step: 0.01
+                },
+                nHabitaciones: {
+                    required: true,
+                    number: true,
+                    min: 1,
+                    max: 8
+                },
+                nBanos: {
+                    required: true,
+                    number: true,
+                    min: 1,
+                    max: 4
+                },
+                idCliente: {
+                    required: true
+                },
+                fechaConstruccion: {
+                    required: true,
+                    date: true
+                }
+            },
+            messages: {
+                nombreCasa: {
+                    required: "Este campo es obligatorio.",
+                    maxlength: "El nombre no debe superar los 50 caracteres."
+                },
+                mtsCuadrados: {
+                    required: "Este campo es obligatorio.",
+                    number: "Debe ingresar un número válido."
+                },
+                nHabitaciones: {
+                    required: "Este campo es obligatorio.",
+                    number: "Debe ingresar un número entero.",
+                    min: "Debe ser al menos 1.",
+                    max: "Debe ser como máximo 8."
+                },
+                nBanos: {
+                    required: "Este campo es obligatorio.",
+                    number: "Debe ingresar un número entero.",
+                    min: "Debe ser al menos 1.",
+                    max: "Debe ser como máximo 4."
+                },
+                idCliente: {
+                    required: "Seleccione un dueño."
+                },
+                fechaConstruccion: {
+                    required: "Este campo es obligatorio.",
+                    date: "Ingrese una fecha válida."
+                }
+            },
+            submitHandler: function (form) {
+                ModificarCasa();
+            }
+        });
+
+        // Función para guardar la casa
+        function ModificarCasa() {
+            var data = {
+                nombreCasa: $("#nombreCasa").val(),
+                mtsCuadrados: $("#mtsCuadrados").val(),
+                nHabitaciones: $("#nHabitaciones").val(),
+                nBanos: $("#nBanos").val(),
+                idCliente: $("#idCliente").val(),
+                fechaConstruccion: $("#fechaConstruccion").val()
+            };
+
+            $.post('@Url.Action("ModificarCasa", "Casas")', data, function (response) {
+                if (response.success) {
+                    alert("La casa fue creada exitosamente.");
+                    window.location.href = '@Url.Action("Index", "Casas")';
+                } else {
+                    $("#errorMessage").text(response.message).show();
+                }
+            });
+        }
+
+        // Función para cargar lista desplegable
+        function loadDropdown(url, parametros, ddl) {
+            $.post(url, parametros, function (data) {
+                ddl.empty();
+                ddl.append("<option value=''>Seleccione un dueño</option>");
+                $(data).each(function () {
+                    ddl.append(new Option(this.Nombre, this.Id));
+                });
+            });
+        }
+        $(document).ready(function () {
+            loadDropdown("@Url.Action("RetornaClientes", "Casas")", {}, $("#idCliente"));
+
+            $("#dialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 600
+            });
+
+            $("#AbrirModal").on("click", function () {
+                $("#dialog").dialog("open");
+            });
+
+            $("#fechaConstruccion").datepicker({
+                dateFormat: "yy/mm/dd",
+                changeYear: true,
+                changeMonth: true,
+                yearRange: "-100:+0"
+            });
+
+
+        });
+    </script>
+}
