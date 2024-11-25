@@ -27,11 +27,6 @@ namespace SistemaDeCondominios.Controllers
                     var persona = db.SpAutenticarUsuario(model.Email, model.Clave).FirstOrDefault();
                     if (persona != null)
                     {
-                        model.IdPersona = persona.Id_persona;
-                        model.Nombre = persona.Nombre;
-                        model.Apellido = persona.Apellido;
-                        model.Email = persona.Email;
-                        model.EsEmpleado = persona.Tipo_persona;
                         Session["idPersona"] = persona.Id_persona;
                         Session["NombreCompleto"] = $"{persona.Nombre}{persona.Apellido}";
                         Session["Email"] = persona.Email;
@@ -53,22 +48,11 @@ namespace SistemaDeCondominios.Controllers
         }
         public ActionResult LogOut()
         {
-            Session.Clear();
-            Session.Abandon();
-            if (Request.Cookies[".ASPXAUTH"] != null)
-            {
-                var cookie = new HttpCookie(".ASPXAUTH")
-                {
-                    Expires = DateTime.Now.AddDays(-1),
-                    Value = "",
-                    HttpOnly = true
-                };
-                Response.Cookies.Add(cookie);
-            }
+            Session["idPersona"] = null;
+            Session["NombreCompleto"] = null;
+            Session["Email"] = null;
+            Session["EsEmpleado"] = null;
 
-            Response.Cache.SetExpires(DateTime.UtcNow.AddMinutes(-1));
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            Response.Cache.SetNoStore();
 
             return RedirectToAction("Index", "Login");
         }
