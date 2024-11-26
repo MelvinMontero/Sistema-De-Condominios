@@ -471,6 +471,25 @@ namespace DataModels
 
 		#endregion
 
+		#region SpModificarServicio
+
+		public static int SpModificarServicio(this PviProyectoFinalDB dataConnection, int? @IdServicio, string @Descripcion, decimal? @Precio)
+		{
+			var parameters = new []
+			{
+				new DataParameter("@IdServicio",  @IdServicio,  LinqToDB.DataType.Int32),
+				new DataParameter("@Descripcion", @Descripcion, LinqToDB.DataType.Text)
+				{
+					Size = 2147483647
+				},
+				new DataParameter("@Precio",      @Precio,      LinqToDB.DataType.Decimal)
+			};
+
+			return dataConnection.ExecuteProc("[dbo].[sp_ModificarServicio]", parameters);
+		}
+
+		#endregion
+
 		#region SpObtenerCasas
 
 		public static IEnumerable<SpObtenerCasasResult> SpObtenerCasas(this PviProyectoFinalDB dataConnection, int? @idCasa)
@@ -544,15 +563,14 @@ namespace DataModels
 
 		public partial class SpRetornaServiciosResult
 		{
-			[Column("id_servicio") ] public int     Id_servicio          { get; set; }
-			[Column("nombre")      ] public string  Nombre               { get; set; }
-			[Column("descripcion") ] public string  Descripcion          { get; set; }
-			[Column("precio")      ] public decimal Precio               { get; set; }
-			[Column("id_categoria")] public int     Id_categoria         { get; set; }
-			[Column("estado")      ] public bool    Estado               { get; set; }
-			                         public string  NombreCategoria      { get; set; }
-			                         public string  CategoriaDescripcion { get; set; }
-			                         public bool    EstadoCategoria      { get; set; }
+			[Column("id_servicio") ] public int     Id_servicio     { get; set; }
+			[Column("nombre")      ] public string  Nombre          { get; set; }
+			[Column("descripcion") ] public string  Descripcion     { get; set; }
+			[Column("precio")      ] public decimal Precio          { get; set; }
+			[Column("id_categoria")] public int     Id_categoria    { get; set; }
+			[Column("estado")      ] public bool    Estado          { get; set; }
+			                         public string  NombreCategoria { get; set; }
+			                         public string  EstadoCobro     { get; set; }
 		}
 
 		#endregion

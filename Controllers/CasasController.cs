@@ -105,9 +105,8 @@ namespace SistemaDeCondominios.Controllers
             }
             catch
             {
-                ViewBag.Resultado = "Ha ocurrido un error";
+                return Json(new { success = false, message = "El nombre de la casa no se puede repetir." });
             }
-            return View();
         }
         public ActionResult InactivarCasa(int? id)
         {

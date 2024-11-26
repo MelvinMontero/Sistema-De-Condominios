@@ -14,7 +14,6 @@ namespace SistemaDeCondominios.Models
         public int IdCategoria { get; set; }
         public bool Estado { get; set; }
         public string Categoria { get; set; }
-        public string CategoriaDescripcion { get; set; }
-        public bool EstadoCategoria { get; set; }
+        public string EstadoCobro { get; set; }
     }
 }

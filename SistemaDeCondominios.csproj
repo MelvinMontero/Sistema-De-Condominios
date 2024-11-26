@@ -358,6 +358,8 @@
     <Content Include="Views\Casas\Exito.cshtml" />
     <Content Include="Views\Servicios\Index.cshtml" />
     <Content Include="Views\Servicios\InsertarServicio.cshtml" />
+    <Content Include="Views\Servicios\Exito.cshtml" />
+    <Content Include="Views\Servicios\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

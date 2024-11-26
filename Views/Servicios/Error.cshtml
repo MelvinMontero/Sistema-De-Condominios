@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "Error";
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Mensaje))
+{
+    <div class="alert alert-danger">
+        <strong>@ViewBag.Mensaje </strong>
+    </div>
+}
+<a href="@Url.Action("Index", "Servicios")" class="btn btn-secondary">Volver</a>
+
+
