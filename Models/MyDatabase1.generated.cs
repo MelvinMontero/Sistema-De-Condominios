@@ -280,6 +280,21 @@ namespace DataModels
 
 		#endregion
 
+		#region RetornarCategorias
+
+		public static IEnumerable<RetornarCategoriasResult> RetornarCategorias(this PviProyectoFinalDB dataConnection)
+		{
+			return dataConnection.QueryProc<RetornarCategoriasResult>("[dbo].[RetornarCategorias]");
+		}
+
+		public partial class RetornarCategoriasResult
+		{
+			[Column("id_categoria")] public int    Id_categoria { get; set; }
+			[Column("nombre")      ] public string Nombre       { get; set; }
+		}
+
+		#endregion
+
 		#region RetornarPersonas
 
 		public static IEnumerable<Persona> RetornarPersonas(this PviProyectoFinalDB dataConnection)
@@ -376,6 +391,29 @@ namespace DataModels
 			};
 
 			return dataConnection.ExecuteProc("[dbo].[sp_CrearCobro]", parameters);
+		}
+
+		#endregion
+
+		#region SpCrearServicio
+
+		public static int SpCrearServicio(this PviProyectoFinalDB dataConnection, string @Nombre, string @Descripcion, decimal? @Precio, int? @IdCategoria)
+		{
+			var parameters = new []
+			{
+				new DataParameter("@Nombre",       @Nombre,      LinqToDB.DataType.NVarChar)
+				{
+					Size = 100
+				},
+				new DataParameter("@Descripcion",  @Descripcion, LinqToDB.DataType.Text)
+				{
+					Size = 2147483647
+				},
+				new DataParameter("@Precio",       @Precio,      LinqToDB.DataType.Decimal),
+				new DataParameter("@Id_Categoria", @IdCategoria, LinqToDB.DataType.Int32)
+			};
+
+			return dataConnection.ExecuteProc("[dbo].[sp_CrearServicio]", parameters);
 		}
 
 		#endregion
@@ -488,6 +526,33 @@ namespace DataModels
 			[Column("mes")        ] public int    Mes         { get; set; }
 			[Column("anno")       ] public int    Anno        { get; set; }
 			[Column("estado")     ] public string Estado      { get; set; }
+		}
+
+		#endregion
+
+		#region SpRetornaServicios
+
+		public static IEnumerable<SpRetornaServiciosResult> SpRetornaServicios(this PviProyectoFinalDB dataConnection, int? @IdServicio)
+		{
+			var parameters = new []
+			{
+				new DataParameter("@Id_Servicio", @IdServicio, LinqToDB.DataType.Int32)
+			};
+
+			return dataConnection.QueryProc<SpRetornaServiciosResult>("[dbo].[sp_RetornaServicios]", parameters);
+		}
+
+		public partial class SpRetornaServiciosResult
+		{
+			[Column("id_servicio") ] public int     Id_servicio          { get; set; }
+			[Column("nombre")      ] public string  Nombre               { get; set; }
+			[Column("descripcion") ] public string  Descripcion          { get; set; }
+			[Column("precio")      ] public decimal Precio               { get; set; }
+			[Column("id_categoria")] public int     Id_categoria         { get; set; }
+			[Column("estado")      ] public bool    Estado               { get; set; }
+			                         public string  NombreCategoria      { get; set; }
+			                         public string  CategoriaDescripcion { get; set; }
+			                         public bool    EstadoCategoria      { get; set; }
 		}
 
 		#endregion

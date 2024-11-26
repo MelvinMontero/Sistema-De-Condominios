@@ -86,8 +86,6 @@ namespace SistemaDeCondominios.Controllers
         [HttpPost]
         public ActionResult ModificarCasa(CasasModel casa)
         {
-            ViewBag.Resultado = false;
-            string resultado = string.Empty;
             try
             {
                 using (var db = new PviProyectoFinalDB("MyDatabase"))
@@ -107,7 +105,7 @@ namespace SistemaDeCondominios.Controllers
             }
             catch
             {
-                resultado = "Ha ocurrido un error";
+                ViewBag.Resultado = "Ha ocurrido un error";
             }
             return View();
         }

@@ -1,0 +1,101 @@
+﻿@model SistemaDeCondominios.Models.ServiciosModel
+@{
+    ViewBag.Title = "InsertarServicio";
+}
+@if (Model == null)
+{
+
+    <h2>Crear Servicio</h2>
+}
+else
+{
+    <h2>Modificar Servicio</h2>
+}
+<form method="post" id="CrearServicio">
+    @Html.HiddenFor(model => model.IdServicio)
+
+    <div class="mb-3">
+        <label for="Nombre" class="form-label">Nombre del Servicio</label>
+        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control"})
+    </div>
+
+    <div class="mb-3">
+        <label for="Descripcion" class="form-label">Descripción</label>
+        @Html.TextBoxFor(model => model.Descripcion, new { @class = "form-control"})
+    </div>
+
+    <div class="mb-3">
+        <label for="Precio" class="form-label">Precio</label>
+        @Html.TextBoxFor(model => model.Precio, new { @class = "form-control"})
+    </div>
+
+    <div class="mb-3">
+        <label for="IdCategoria" class="form-label">Categoria</label>
+        <select id="IdCategoria" class="form-control" required>
+            <option value="">Selecione una Categoría</option>
+        </select>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Guardar" />
+    <a href="@Url.Action("Index", "Servicios")" class="btn btn-secondary">Volver</a>
+</form>
+@section Scripts {
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+        $("#CrearServicio").validate({
+            rules: {
+                Nombre: {
+                    required: true,
+                    maxlength: 250,
+                },
+                Descripcion: {
+                    required: true,
+                    maxlength: 250
+                },
+                Precio: {
+                    required: true,
+                    number: true,
+                    min: 0.01
+                },
+                IdCategoria: {
+                    required: true
+                }
+            },
+            messages: {
+                Nombre: {
+                    required: "Este campo es obligatorio.",
+                    maxlength: "El nombre no debe superar los 250 caracteres."
+                },
+                Descripcion: {
+                    required: "Este campo es obligatorio.",
+                    maxlength: "La descripción no debe superar los 250 caracteres."
+                },
+                Precio: {
+                    required: "Este campo es obligatorio.",
+                    number: "Debe ingresar un número válido.",
+                    min: "Debe ser un número mayor a cero."
+                },
+                IdCategoria: {
+                    required: "Seleccione una categoría."
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+        // Función para cargar lista desplegable
+        function loadDropdown(url, parametros, ddl) {
+            $.post(url, parametros, function (data) {
+                ddl.empty();
+                ddl.append("<option value=''>Seleccione una Categoría</option>");
+                $(data).each(function () {
+                    ddl.append(new Option(this.Nombre, this.Id));
+                });
+            });
+        }
+        $(document).ready(function () {
+            loadDropdown("@Url.Action("RetornaCategorias", "Servicios")", {}, $("#IdCategoria"));
+        });
+
+    </script>
+}

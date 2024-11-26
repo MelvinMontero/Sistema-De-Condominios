@@ -1,0 +1,32 @@
+﻿@model List<SistemaDeCondominios.Models.ServiciosModel>
+@{
+    ViewBag.Title = "GestionarServicios";
+}
+
+<h2>Gestionar Servicios</h2>
+@Html.ActionLink("Nuevo Servicio", "InsertarServicio", null, new { @class = "btn btn-primary" })
+<table class="table table-hover table-bordered">
+    <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Categoría</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    <tbody>
+        @foreach (var servicios in Model)
+        {
+            <tr>
+                <td>@servicios.IdServicio</td>
+                <td>@servicios.Nombre</td>
+                <td>₡@servicios.Precio</td>
+                <td>@servicios.Categoria</td>
+                <td>@(servicios.Estado == true ? "Activo" : "Inactivo")</td>
+                <td>
+                    @Html.ActionLink("Consultar", "InsertarServicio", "Servicios", new { Id = servicios.IdServicio }, new { @class = "btn btn-primary me-2" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
