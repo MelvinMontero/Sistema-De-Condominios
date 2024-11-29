@@ -4,30 +4,48 @@
 }
 
 <h2>Crear Cobro</h2>
-<form method="post" id="CrearCobro">
+
+
+<form method="post" id="Myform">
+
+
     <div class="mb-3">
+        <label class="form-label" for="idPersona">Cliente:</label>
         <select id="idPersona" name="idPersona" class="form-control">
-            <option value="">Seleccione un Cliente</option>
+            <option value="">Seleccione una persona</option>
         </select>
     </div>
+
+
     <div class="mb-3">
+        <label class="form-label" for="idCasa">Casa:</label>
         <select id="idCasa" name="idCasa" class="form-control">
             <option value="">Seleccione una casa</option>
         </select>
     </div>
+
     <div class="mb-3">
-        <label class="form-label" for="Anno">Año:</label>
-        <select class="form-control" id="Anno" name="Anno">
-            @for (int year = 2000; year <= DateTime.Now.Year; year++)
-            {
-                <option value="@year">@year</option>
-            }
+        <label class="form-label" for="anno">Año:</label>
+        <select id="anno" name="anno" class="form-control">
+            <option value="">Seleccione un año</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+            <option value="2031">2031</option>
+            <option value="2032">2032</option>
+            <option value="2033">2033</option>
+            <option value="2034">2034</option>
         </select>
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="Mes">Mes:</label>
-        <select class="form-control" id="Mes" name="Mes">
+        <label class="form-label" for="mes">Mes:</label>
+        <select id="mes" name="mes" class="form-control">
+            <option value="">Seleccione un mes</option>
             <option value="1">Enero</option>
             <option value="2">Febrero</option>
             <option value="3">Marzo</option>
@@ -42,4 +60,111 @@
             <option value="12">Diciembre</option>
         </select>
     </div>
+
+
+    <!-- Campo de selección de servicios -->
+    <div class="form-group mb-3">
+        <label for="Servicios">Seleccionar Servicios</label>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="Servicios" value="Seguridad" id="Seguridad">
+            <label class="form-check-label" for="Seguridad">Seguridad</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="Servicios" value="Agua" id="Agua">
+            <label class="form-check-label" for="Agua">Agua</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="Servicios" value="Luz" id="Luz">
+            <label class="form-check-label" for="Luz">Luz</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="Servicios" value="Internet" id="Internet">
+            <label class="form-check-label" for="Internet">Internet</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        @Html.ActionLink("Regresar", "Index", "Cobro", new { @class = "btn btn-light" })
+        <button type="submit" class="btn btn-primary">Guardar Cobro</button>
+    </div>
+
+
+
 </form>
+@ViewBag.Resultado
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Content/validacionesGenericas.js"></script>
+    <script type="text/javascript">
+        $("#Myform").validate({
+            rules: {
+                'idPersona': {
+                    required: true,
+                },
+                'idCasa': {
+                    required: true,
+                },
+                'anno': {
+                    required: true,
+                },
+                'mes': {
+                    required: true,
+                },
+                'Servicios': {
+                    required: true,
+                    minlength: 1
+                }
+            },
+            messages: {
+                'Servicios': {
+                    required: "Debe seleccionar al menos un servicio."  // Mensaje personalizado
+                }
+            }
+        });
+
+
+           // Limpiar el DropDownList
+        function cleanDropDown(ddl) {
+            ddl.empty();
+            ddl.append("<option value=''>Seleccione una opción</option>");
+        }
+
+        // Cargar DropDownList anidado
+        function loadDropDown(url, parametros, ddl, selected) {
+            $.post(url, parametros, function (data) {
+                cleanDropDown(ddl);
+                $(data).each(function () {
+                    var option = new Option(this.Nombre, this.Id);
+                    if (this.Id == selected) {
+                        option.selected = true;
+                    }
+                    ddl.append(option);
+                });
+            });
+        }
+
+        function setChanges() {
+            // Cuando se selecciona un cliente, cargar las casas relacionadas
+            $("#idPersona").change(function () {
+                loadDropDown("/Cobros/Casas", { idPersona: $("#idPersona").val() }, $("#idCasa"));
+            });
+        };
+
+        $(document).ready(function () {
+            // Cargar los datos iniciales para el Cliente y Casa
+            var idPersona = @((this.Model != null) ? this.Model.idPersona : 0);
+            var idCasa = @((this.Model != null) ? this.Model.idCasa : 0);
+
+            // Cargar los clientes inicialmente
+            loadDropDown("/Cobros/Clientes", {}, $("#idPersona"), idPersona);
+
+            // Si ya hay un idCasa seleccionado, cargar las casas correspondientes
+            if (idPersona != 0) {
+                loadDropDown("/Cobros/Casas", { id: idPersona }, $("#idCasa"), idCasa);
+            }
+
+            setChanges();
+        });
+    </script>
+}

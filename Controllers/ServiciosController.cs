@@ -73,8 +73,7 @@ namespace SistemaDeCondominios.Controllers
                     }).FirstOrDefault();
                 }
                 else
-                {
-                    
+                {       
                     servicios = null;
                 }                
             }
@@ -129,7 +128,11 @@ namespace SistemaDeCondominios.Controllers
             var list = new List<Dropdown>();
             using (var db = new PviProyectoFinalDB("MyDatabase"))
             {
-                list = db.RetornarCategorias().Select(_ => new Dropdown { Id = _.Id_categoria, Nombre = _.Nombre }).ToList();
+                list = db.RetornarCategorias().Select(_ => new Dropdown 
+                {
+                    Id = _.Id_categoria,
+                    Nombre = _.Nombre 
+                }).ToList();
             }
             return Json(list);
         }

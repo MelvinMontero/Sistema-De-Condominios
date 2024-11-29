@@ -113,24 +113,26 @@ else
                     min: "Debe ser un número mayor a cero."
                 },
                 IdCategoria: {
-                    required: "Seleccione una categoría."
+                    required: "Seleccione una categoría.",
                     required: "Este campo es requerido."
                 }
             }
         });
+
+        
         function loadDropdown(url, parametros, ddl, selected) {
-                $.post(url, parametros, function (data) {
-                    ddl.empty();
-                    ddl.append("<option value=''>Seleccione una categoría</option>");
-                    $(data).each(function () {
-                        var option = new Option(this.Nombre, this.Id);
-                        if (this.Id == selected) {
-                            option.selected = true;
-                        }
-                        ddl.append(option);
-                    })
-                } );
-            };
+            $.post(url, parametros, function (data) {
+                ddl.empty();
+                ddl.append("<option value=''>Seleccione una opción</option>");
+                $(data).each(function () {
+                    var option = new Option(this.Nombre, this.Id);
+                    if (this.Id == selected) {
+                        option.selected = true;
+                    }
+                    ddl.append(option);
+                })
+            });
+        };
         $(document).ready(function () {
             loadDropdown("/Servicios/Categorias", {}, $("#IdCategoria"));
             setChanges();
