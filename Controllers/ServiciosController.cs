@@ -81,7 +81,8 @@ namespace SistemaDeCondominios.Controllers
         }
         [HttpPost]
         public ActionResult InsertarServicio(ServiciosModel servicio)
-        {    
+        {
+            string mensaje;
             try
             {
                 using(var db = new PviProyectoFinalDB("MyDatabase"))
@@ -90,19 +91,20 @@ namespace SistemaDeCondominios.Controllers
                     if (servicio.IdServicio == 0)
                     {
                         db.SpCrearServicio(servicio.Nombre, servicio.Descripcion, servicio.Precio, servicio.IdCategoria);
-                        return ViewBag.Mensaje = "El servicio ha sido creado exitosamente.";
+                        mensaje = "El servicio ha sido creado exitosamente.";
                     }
                     else
                     {
                         db.SpModificarServicio(servicio.IdServicio, servicio.Descripcion, servicio.Precio);
-                        return ViewBag.Mensaje = "El servicio ha sido insertado exitosamente.";
+                        mensaje = "El servicio ha sido modificado exitosamente.";
                     }
                 }
             }
             catch (Exception) {
-                ViewBag.Mensaje = "El servicio no puede tener un nombre igual al de un servicio existente.";
+                mensaje = "El servicio no puede tener un nombre igual al de un servicio existente.";
             }
-            return View();
+            ViewBag.Mensaje = mensaje;
+            return View(servicio);
         }
         public ActionResult Exito(string mensaje)
         {

@@ -78,6 +78,7 @@ else
 </form>
 @section Scripts {
     <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
         $("#CrearServicio").validate({
             rules: {
@@ -119,11 +120,10 @@ else
             }
         });
 
-        
         function loadDropdown(url, parametros, ddl, selected) {
             $.post(url, parametros, function (data) {
                 ddl.empty();
-                ddl.append("<option value=''>Seleccione una opción</option>");
+                ddl.append("<option value=''>Seleccione una opcion</option>");
                 $(data).each(function () {
                     var option = new Option(this.Nombre, this.Id);
                     if (this.Id == selected) {
@@ -137,5 +137,6 @@ else
             loadDropdown("/Servicios/Categorias", {}, $("#IdCategoria"));
             setChanges();
         });
+        
     </script>
 }
