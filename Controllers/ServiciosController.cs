@@ -91,12 +91,12 @@ namespace SistemaDeCondominios.Controllers
                     if (servicio.IdServicio == 0)
                     {
                         db.SpCrearServicio(servicio.Nombre, servicio.Descripcion, servicio.Precio, servicio.IdCategoria);
-                        mensaje = "El servicio ha sido creado exitosamente.";
+                        return RedirectToAction("Exito", "Servicios", new { mensaje = "El servicio ha sido creado exitosamente." });
                     }
                     else
                     {
                         db.SpModificarServicio(servicio.IdServicio, servicio.Descripcion, servicio.Precio);
-                        mensaje = "El servicio ha sido modificado exitosamente.";
+                        return RedirectToAction("Exito", "Servicios", new { mensaje = "El servicio ha sido modificado exitosamente." });
                     }
                 }
             }
@@ -104,8 +104,17 @@ namespace SistemaDeCondominios.Controllers
                 mensaje = "El servicio no puede tener un nombre igual al de un servicio existente.";
             }
             ViewBag.Mensaje = mensaje;
-            return View(servicio);
+            return View();
         }
+        public ActionResult Inactivar(int? Id)
+        {
+            using (var db = new PviProyectoFinalDB("MyDatabase"))
+            {
+                db.SpInactivarServicio(Id);
+            }
+            return RedirectToAction("Exito", "Servicios", new { mensaje = "El servicio ha sido inactivado exitosamente." });
+        }
+        
         public ActionResult Exito(string mensaje)
         {
             if (Session["idPersona"] == null)
