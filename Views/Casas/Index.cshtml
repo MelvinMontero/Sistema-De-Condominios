@@ -25,7 +25,7 @@
                 <td>@casas.nHabitaciones</td>
                 <td>@casas.nBanos</td>
                 <td>@casas.NombreCliente @casas.ApellidoCliente</td>
-                <td>@casas.FechaConstruccion</td>
+                <td>@casas.FechaConstruccion.ToString("dd/MM/yyyy")</td>
                 <td>@(casas.Estado == true ? "Activa" : "Inactiva")</td>
                 <td>
                     @Html.ActionLink("Modificar", "ModificarCasa", "Casas", new { Id = casas.IdCasa }, new { @class = "btn btn-primary me-2" })

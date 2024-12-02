@@ -33,14 +33,20 @@
                         {
                             <li>@Html.ActionLink("Mis Cobros", "Index", "Cobros", new { area = "" }, new { @class = "nav-link" })</li>
                         }
+                    }
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    @if (Session["idPersona"] != null) // Verifica si hay una sesión activa
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link"> @Session["NombreCompleto"]</span> <!-- Muestra el nombre completo -->
+                        </li>
                         <li>@Html.ActionLink("Cerrar Sesión", "LogOut", "Login", new { area = "" }, new { @class = "nav-link" })</li>
                     }
                     else
                     {
                         <li>@Html.ActionLink("Iniciar Sesión", "Index", "Login", new { area = "" }, new { @class = "nav-link" })</li>
                     }
-
-
                 </ul>
             </div>
         </div>
