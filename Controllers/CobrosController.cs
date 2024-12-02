@@ -73,7 +73,7 @@ namespace SistemaDeCondominios.Controllers
                             nombreCasa = _.Nombre_casa,
                             Propietario = _.Propietario,
                             Periodo = _.Periodo,
-                            Monto = _.Monto,
+                            Monto = _.Monto?? 0m,
                             estado = _.Estado,
                             //FechaCancelacion = _.Fecha_cancelacion
                         })
@@ -100,7 +100,7 @@ namespace SistemaDeCondominios.Controllers
                         .ToList();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Manejo de errores
                 return RedirectToAction("Index", "Cobro");
