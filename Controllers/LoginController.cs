@@ -48,13 +48,14 @@ namespace SistemaDeCondominios.Controllers
         }
         public ActionResult LogOut()
         {
-            Session["idPersona"] = null;
-            Session["NombreCompleto"] = null;
-            Session["Email"] = null;
-            Session["EsEmpleado"] = null;
-
-
-            return RedirectToAction("Index", "Login");
+            Session.Remove("idPersona");
+            Session.Remove("NombreCompleto");
+            Session.Remove("Email");
+            Session.Remove("EsEmpleado");
+            Session.Clear();
+            Session.Abandon();
+            
+            return RedirectToAction("Index", "Home");
         }
 
     }

@@ -41,7 +41,7 @@
                         <li class="nav-item">
                             <span class="nav-link"> @Session["NombreCompleto"]</span> <!-- Muestra el nombre completo -->
                         </li>
-                        <li>@Html.ActionLink("Cerrar Sesión", "LogOut", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li><a href="#" class="nav-link" onclick="confirmarCerrarSesion(event, '@Url.Action("LogOut", "Login")')">Cerrar Sesión</a></li>
                     }
                     else
                     {
@@ -64,3 +64,12 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<script>
+    function confirmarCerrarSesion(event, logoutUrl) {
+        event.preventDefault(); // Evita que el enlace se siga automáticamente
+        if (confirm("¿Está seguro de que desea cerrar sesión?")) {
+            window.location.href = logoutUrl; // Redirige al cerrar sesión si confirma
+        }
+    }
+</script>
+
