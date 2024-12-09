@@ -9,5 +9,6 @@ namespace SistemaDeCondominios.Models
     {
         public CobroModel Cobro { get; set; } // Detalles del cobro
         public List<BitacoraModel> Bitacoras { get; set; } // Lista de bitácoras asociadas
+
     }
 }

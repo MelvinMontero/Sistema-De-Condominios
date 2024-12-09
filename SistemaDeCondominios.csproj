@@ -363,7 +363,8 @@
     <Content Include="Views\Servicios\InsertarServicio.cshtml" />
     <Content Include="Views\Servicios\Exito.cshtml" />
     <Content Include="Views\Servicios\Error.cshtml" />
-    <Content Include="Views\Cobros\CrearCobro.cshtml" />
+    <Content Include="Views\Cobros\Crear.cshtml" />
+    <Content Include="Views\Cobros\ConsultarCobros.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

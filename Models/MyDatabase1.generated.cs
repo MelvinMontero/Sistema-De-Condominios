@@ -271,6 +271,20 @@ namespace DataModels
 
 	public static partial class PviProyectoFinalDBStoredProcedures
 	{
+		#region EliminacionDeCobro
+
+		public static int EliminacionDeCobro(this PviProyectoFinalDB dataConnection, int? @idCobro)
+		{
+			var parameters = new []
+			{
+				new DataParameter("@id_cobro", @idCobro, LinqToDB.DataType.Int32)
+			};
+
+			return dataConnection.ExecuteProc("[dbo].[EliminacionDeCobro]", parameters);
+		}
+
+		#endregion
+
 		#region ObtenerCasasPorCliente
 
 		public static IEnumerable<ObtenerCasasPorClienteResult> ObtenerCasasPorCliente(this PviProyectoFinalDB dataConnection, int? @idPersona)
@@ -320,6 +334,29 @@ namespace DataModels
 		public static IEnumerable<Persona> RetornarPersonas(this PviProyectoFinalDB dataConnection)
 		{
 			return dataConnection.QueryProc<Persona>("[dbo].[RetornarPersonas]");
+		}
+
+		#endregion
+
+		#region SpActualizarCobro
+
+		public static int SpActualizarCobro(this PviProyectoFinalDB dataConnection, int? @idCobro, int? @idPersona, int? @idCasa, int? @anno, int? @mes, string @idServicios, int? @idUser)
+		{
+			var parameters = new []
+			{
+				new DataParameter("@idCobro",      @idCobro,     LinqToDB.DataType.Int32),
+				new DataParameter("@idPersona",    @idPersona,   LinqToDB.DataType.Int32),
+				new DataParameter("@idCasa",       @idCasa,      LinqToDB.DataType.Int32),
+				new DataParameter("@anno",         @anno,        LinqToDB.DataType.Int32),
+				new DataParameter("@mes",          @mes,         LinqToDB.DataType.Int32),
+				new DataParameter("@id_servicios", @idServicios, LinqToDB.DataType.VarChar)
+				{
+					Size = -1
+				},
+				new DataParameter("@id_user",      @idUser,      LinqToDB.DataType.Int32)
+			};
+
+			return dataConnection.ExecuteProc("[dbo].[SpActualizarCobro]", parameters);
 		}
 
 		#endregion
@@ -399,15 +436,19 @@ namespace DataModels
 
 		#region SpCrearCobro
 
-		public static int SpCrearCobro(this PviProyectoFinalDB dataConnection, int? @idUser, int? @idCasa, int? @anno, int? @mes, int? @idServicio)
+		public static int SpCrearCobro(this PviProyectoFinalDB dataConnection, int? @idUser, int? @idCasa, int? @anno, int? @mes, string @idServicios, int? @idAdmin)
 		{
 			var parameters = new []
 			{
-				new DataParameter("@id_user",     @idUser,     LinqToDB.DataType.Int32),
-				new DataParameter("@id_casa",     @idCasa,     LinqToDB.DataType.Int32),
-				new DataParameter("@anno",        @anno,       LinqToDB.DataType.Int32),
-				new DataParameter("@mes",         @mes,        LinqToDB.DataType.Int32),
-				new DataParameter("@id_servicio", @idServicio, LinqToDB.DataType.Int32)
+				new DataParameter("@id_user",      @idUser,      LinqToDB.DataType.Int32),
+				new DataParameter("@id_casa",      @idCasa,      LinqToDB.DataType.Int32),
+				new DataParameter("@anno",         @anno,        LinqToDB.DataType.Int32),
+				new DataParameter("@mes",          @mes,         LinqToDB.DataType.Int32),
+				new DataParameter("@id_servicios", @idServicios, LinqToDB.DataType.VarChar)
+				{
+					Size = -1
+				},
+				new DataParameter("@id_Admin",     @idAdmin,     LinqToDB.DataType.Int32)
 			};
 
 			return dataConnection.ExecuteProc("[dbo].[sp_CrearCobro]", parameters);
@@ -526,9 +567,21 @@ namespace DataModels
 
 		#region SpObtenerBitacora
 
-		public static IEnumerable<Bitacora> SpObtenerBitacora(this PviProyectoFinalDB dataConnection)
+		public static IEnumerable<SpObtenerBitacoraResult> SpObtenerBitacora(this PviProyectoFinalDB dataConnection)
 		{
-			return dataConnection.QueryProc<Bitacora>("[dbo].[sp_ObtenerBitacora]");
+			return dataConnection.QueryProc<SpObtenerBitacoraResult>("[dbo].[sp_ObtenerBitacora]");
+		}
+
+		public partial class SpObtenerBitacoraResult
+		{
+			[Column("id_bitacora")] public int       Id_bitacora     { get; set; }
+			[Column("detalle")    ] public string    Detalle         { get; set; }
+			[Column("id_cobro")   ] public int?      Id_cobro        { get; set; }
+			[Column("id_user")    ] public int?      Id_user         { get; set; }
+			[Column("fecha")      ] public DateTime? Fecha           { get; set; }
+			                        public string    NombrePersona   { get; set; }
+			                        public string    ApellidoPersona { get; set; }
+			                        public string    Accion          { get; set; }
 		}
 
 		#endregion
@@ -579,13 +632,22 @@ namespace DataModels
 
 		public partial class SpObtenerCobroPorIdResult
 		{
-			[Column("id_cobro")   ] public int      Id_cobro    { get; set; }
-			                        public string   Propietario { get; set; }
-			[Column("nombre_casa")] public string   Nombre_casa { get; set; }
-			[Column("monto")      ] public decimal? Monto       { get; set; }
-			[Column("precio")     ] public decimal? Precio      { get; set; }
-			                        public string   Periodo     { get; set; }
-			[Column("estado")     ] public string   Estado      { get; set; }
+			[Column("id_cobro")    ] public int       Id_cobro     { get; set; }
+			[Column("id_persona")  ] public int?      Id_persona   { get; set; }
+			                         public string    Propietario  { get; set; }
+			[Column("nombre_casa") ] public string    Nombre_casa  { get; set; }
+			[Column("id_casa")     ] public int       Id_casa      { get; set; }
+			[Column("monto")       ] public decimal?  Monto        { get; set; }
+			[Column("precio")      ] public decimal?  Precio       { get; set; }
+			[Column("mes")         ] public int       Mes          { get; set; }
+			[Column("anno")        ] public int       Anno         { get; set; }
+			                         public string    Periodo      { get; set; }
+			[Column("estado")      ] public string    Estado       { get; set; }
+			[Column("fecha_pagada")] public DateTime? Fecha_pagada { get; set; }
+			                         public int       Seguridad    { get; set; }
+			                         public int       Agua         { get; set; }
+			                         public int       Luz          { get; set; }
+			                         public int       Internet     { get; set; }
 		}
 
 		#endregion
@@ -613,6 +675,21 @@ namespace DataModels
 			[Column("mes")        ] public int    Mes         { get; set; }
 			[Column("anno")       ] public int    Anno        { get; set; }
 			[Column("estado")     ] public string Estado      { get; set; }
+		}
+
+		#endregion
+
+		#region SpPagarCobro
+
+		public static int SpPagarCobro(this PviProyectoFinalDB dataConnection, int? @idCobro, int? @idUser)
+		{
+			var parameters = new []
+			{
+				new DataParameter("@id_cobro", @idCobro, LinqToDB.DataType.Int32),
+				new DataParameter("@id_user",  @idUser,  LinqToDB.DataType.Int32)
+			};
+
+			return dataConnection.ExecuteProc("[dbo].[sp_PagarCobro]", parameters);
 		}
 
 		#endregion

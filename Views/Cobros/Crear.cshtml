@@ -1,0 +1,168 @@
+﻿@model SistemaDeCondominios.Models.CobroModel
+@{
+    ViewBag.Title = "Crear";
+}
+@if (this.Model == null)
+{
+    <h2>Crear Cobro</h2>
+}
+
+
+<form method="post" id="Myform">
+    @Html.HiddenFor(model => model.idCobro)
+
+    <div class="mb-3">
+        <label class="form-label" for="idPersona">Cliente:</label>
+        <select id="idPersona" name="idPersona" class="form-control">
+            <option value="">Seleccione una persona</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="idCasa">Casa:</label>
+        <select id="idCasa" name="idCasa" class="form-control">
+            <option value="">Seleccione una casa</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="anno">Año:</label>
+        <select id="anno" name="anno" class="form-control">
+            <option value="">Seleccione un año</option>
+            @for (int i = 2024; i <= 2032; i++)
+            {
+                <option value="@i" @(Model?.anno == i ? "selected" : "")>@i</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="mes">Mes:</label>
+        @Html.DropDownListFor(
+            model => model.mes,
+            new SelectList(
+                new List<object>
+                {
+                    new { Value = "", Text = "Seleccione un mes" },
+                    new { Value = "1", Text = "Enero" },
+                    new { Value = "2", Text = "Febrero" },
+                    new { Value = "3", Text = "Marzo" },
+                    new { Value = "4", Text = "Abril" },
+                    new { Value = "5", Text = "Mayo" },
+                    new { Value = "6", Text = "Junio" },
+                    new { Value = "7", Text = "Julio" },
+                    new { Value = "8", Text = "Agosto" },
+                    new { Value = "9", Text = "Septiembre" },
+                    new { Value = "10", Text = "Octubre" },
+                    new { Value = "11", Text = "Noviembre" },
+                    new { Value = "12", Text = "Diciembre" },
+                },
+                "Value",
+                "Text"
+            ),
+            "Seleccione un mes",
+            new { @class = "form-control" }
+        )
+    </div>
+
+
+    <!-- Servicios -->
+    <div class="form-check">
+        @Html.CheckBoxFor(model => model.Seguridad, new { @class = "form-check-input", id = "Seguridad" })
+        <label class="form-check-label" for="Seguridad">Seguridad</label>
+    </div>
+    <div class="form-check">
+        @Html.CheckBoxFor(model => model.Agua, new { @class = "form-check-input", id = "Agua" })
+        <label class="form-check-label" for="Agua">Agua</label>
+    </div>
+    <div class="form-check">
+        @Html.CheckBoxFor(model => model.Luz, new { @class = "form-check-input", id = "Luz" })
+        <label class="form-check-label" for="Luz">Luz</label>
+    </div>
+    <div class="form-check">
+        @Html.CheckBoxFor(model => model.Internet, new { @class = "form-check-input", id = "Internet" })
+        <label class="form-check-label" for="Internet">Internet</label>
+    </div>
+
+    <div class="mb-3">
+        @Html.ActionLink("Regresar", "Index", "Cobro", new { @class = "btn btn-light" })
+        <button type="submit" class="btn btn-primary">Guardar Cobro</button>
+    </div>
+
+    @ViewBag.Resultado
+
+</form>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        // Validación personalizada para asegurarse de que al menos un servicio esté seleccionado
+        $.validator.addMethod("checkServicios", function () {
+            return $('#Seguridad').prop('checked') || $('#Agua').prop('checked') || $('#Luz').prop('checked') || $('#Internet').prop('checked');
+        }, "Debe seleccionar al menos un servicio.");
+
+        $("#Myform").validate({
+            rules: {
+                'idPersona': { required: true },
+                'idCasa': { required: true },
+                'anno': { required: true },
+                'mes': { required: true },
+                "Seguridad": { checkServicios: true },
+                "Agua": { checkServicios: true },
+                "Luz": { checkServicios: true },
+                "Internet": { checkServicios: true }
+            },
+            messages: {
+                'idPersona': { required: "Debe seleccionar un cliente." },
+                'idCasa': { required: "Debe seleccionar una casa." },
+                'anno': { required: "Debe seleccionar un año." },
+                'mes': { required: "Debe seleccionar un mes." },
+                "Seguridad": { checkServicios: "Debe seleccionar al menos un servicio." },
+                "Agua": { checkServicios: "Debe seleccionar al menos un servicio." },
+                "Luz": { checkServicios: "Debe seleccionar al menos un servicio." },
+                "Internet": { checkServicios: "Debe seleccionar al menos un servicio." }
+            }
+        });
+
+        function cleanDropDown(ddl) {
+            ddl.empty();
+            ddl.append("<option value=''>Seleccione una opción</option>");
+        }
+
+        function loadDropDown(url, parametros, ddl, selected) {
+            $.post(url, parametros, function (data) {
+                cleanDropDown(ddl);
+                if (data && data.length > 0) {
+                    $(data).each(function () {
+                        var option = new Option(this.Nombre, this.Id);
+                        if (this.Id == selected) {
+                            option.selected = true;
+                        }
+                        ddl.append(option);
+                    });
+                }
+            }).fail(function () {
+                console.error("Error al cargar el dropdown desde " + url);
+            });
+        }
+
+        $(document).ready(function () {
+            var idPersona = @((this.Model?.idPersona) ?? 0);
+            var idCasa = @((this.Model?.idCasa) ?? 0);
+
+            loadDropDown("/Cobros/Clientes", {}, $("#idPersona"), idPersona);
+
+            if (idPersona) {
+                loadDropDown("/Cobros/Casas", { idPersona: idPersona }, $("#idCasa"), idCasa);
+            }
+
+            $("#idPersona").change(function () {
+                var idPersona = $(this).val();
+                if (idPersona) {
+                    loadDropDown("/Cobros/Casas", { idPersona: idPersona }, $("#idCasa"));
+                } else {
+                    cleanDropDown($("#idCasa"));
+                }
+            });
+        });
+    </script>
+}

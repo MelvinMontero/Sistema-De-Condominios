@@ -1,0 +1,133 @@
+﻿@model SistemaDeCondominios.Models.CobroDetalleViewModel
+@{
+    ViewBag.Title = "ConsultarCobros";
+}
+
+<div class="container mt-4 mb-4">
+    <h2>Detalle del cobro</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered border-secondary border-opacity-50 w-25">
+            <tr>
+                <th class="bg-light"># Cobro</th>
+                <td>@Model.Cobro.idCobro</td>
+            </tr>
+            <tr>
+                <th class="bg-light"># Casa</th>
+                <td>@Model.Cobro.nombreCasa</td>
+            </tr>
+            <tr>
+                <th class="bg-light">Propietario</th>
+                <td>@Model.Cobro.Propietario</td>
+            </tr>
+            <tr>
+                <th class="bg-light">Período</th>
+                <td>@Model.Cobro.Periodo</td>
+            </tr>
+            <tr>
+                <th class="bg-light">Estado</th>
+                <td>@Model.Cobro.estado</td>
+            </tr>
+            @if (Model.Cobro.estado == "Pagado")
+            {
+                <tr>
+                    <th class="bg-light">Fecha de Cancelación</th>
+                    <td>
+                        @(Model.Cobro.fechapagada.HasValue
+    ? Model.Cobro.fechapagada.Value.ToString("dd/MM/yyyy")
+    : "No registrada")
+                    </td>
+                </tr>
+            }
+            <tr>
+                <th class="bg-light">Monto</th>
+                <td>@string.Format("${0:N2}", Model.Cobro.Monto)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="form-check">
+                <input type="checkbox" name="ServiciosSeleccionados" value="3" id="Seguridad" class="form-check-input"
+                       @(Model.Cobro.Seguridad ? "checked" : "") disabled />
+                <label class="form-check-label" for="Seguridad">Seguridad</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" name="ServiciosSeleccionados" value="4" id="Agua" class="form-check-input"
+                       @(Model.Cobro.Agua ? "checked" : "") disabled />
+                <label class="form-check-label" for="Agua">Agua</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" name="ServiciosSeleccionados" value="5" id="Luz" class="form-check-input"
+                       @(Model.Cobro.Luz ? "checked" : "") disabled />
+                <label class="form-check-label" for="Luz">Luz</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" name="ServiciosSeleccionados" value="6" id="Internet" class="form-check-input"
+                       @(Model.Cobro.Internet ? "checked" : "") disabled />
+                <label class="form-check-label" for="Internet">Internet</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-4">
+        <div class="col-12">
+            @if (Model.Cobro.estado == "PENDIENTE")
+            {
+                <div class="d-flex gap-3">
+                    <!-- Botón para marcar el cobro como pagado con confirmación, visible para el cliente -->
+                    <a href="@Url.Action("Pagar", "Cobros", new { idCobro = Model.Cobro.idCobro })" class="btn btn-success"
+                       onclick="return confirm('¿Estás seguro de que deseas pagar este cobro?');">
+                        Pagar
+                    </a>
+                </div>
+            }
+
+            <!-- Botón "Regresar" con color personalizado y espacio, visible tanto para el cliente como para el empleado -->
+            <a href="@Url.Action("Index", "Cobros")" class="btn btn-info text-white">
+                Regresar
+            </a>
+
+            @if (Session["EsEmpleado"] != null && (string)Session["EsEmpleado"] == "Empleado")
+            {
+                <!-- Botón para editar el cobro solo para empleados -->
+                @Html.ActionLink("Editar", "Crear", "Cobros", new { id = Model.Cobro.idCobro }, new { @class = "btn btn-primary" })
+
+                <!-- Botón para eliminar el cobro solo para empleados -->
+                @Html.ActionLink("Eliminar", "Eliminar", "Cobros", new { id = Model.Cobro.idCobro }, new { @class = "btn btn-danger", onclick = "return confirm('¿Estás seguro de que deseas eliminar este cobro?');" })
+            }
+        </div>
+    </div>
+    @*@Html.ActionLink("Eliminar", "Eliminar", "Cobros", new { id = Model.Cobro.idCobro }, new { @class = "btn btn-danger", onclick = "return confirm('¿Estás seguro de que deseas eliminar este cobro?');" })*@
+
+    <div class="row mt-4 mb-4">
+        <div class="col-12">
+            <h2>Lista de acciones realizadas</h2>
+
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>Fecha y Hora</th>
+                            <th>Acción</th>
+                            <th>Detalle</th>
+                            <th>Realizado por</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var bitacora in Model.Bitacoras)
+                        {
+                            <tr>
+                                <td>@(bitacora.Fecha != null ? bitacora.Fecha.Value.ToString("dd/MM/yyyy") : "")</td>
+                                <td>@bitacora.Accion</td>
+                                <td>@bitacora.Detalle</td>
+                                <td>@bitacora.NombrePersona</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

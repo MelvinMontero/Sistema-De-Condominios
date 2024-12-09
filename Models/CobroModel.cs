@@ -8,9 +8,9 @@ namespace SistemaDeCondominios.Models
     public class CobroModel
     {
         public int idCobro { get; set; }
-        public int idCasa { get; set; }
+        public int? idCasa { get; set; }
         public string nombreCasa { get; set; }
-        public int idPersona { get; set; }
+        public int? idPersona { get; set; }
         public string nombrePersona { get; set; }
         public string apellidoPersona { get; set; }
         public int mes { get; set; }
@@ -24,7 +24,10 @@ namespace SistemaDeCondominios.Models
         public bool Agua { get; set; }
         public bool Luz { get; set; }
         public bool Internet { get; set; }
-        public DateTime FechaCancelacion { get; set; }
+        public DateTime? fechapagada { get; set; }
+
+        public string Detalle { get; set; }
+
 
     }
 }

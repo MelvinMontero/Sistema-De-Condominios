@@ -13,6 +13,6 @@ namespace SistemaDeCondominios.Models
         public int? IdUser { get; set; }
         public DateTime? Fecha { get; set; }
         public string Accion { get; set; }
+        public string NombrePersona { get; set; }
     }
-
 }
