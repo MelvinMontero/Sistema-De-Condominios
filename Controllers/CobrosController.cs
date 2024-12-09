@@ -2,6 +2,7 @@
 using SistemaDeCondominios.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -56,6 +57,11 @@ namespace SistemaDeCondominios.Controllers
             if (Session["idPersona"] == null)
             {
                 return RedirectToAction("Index", "Login");
+            }
+            if (cobro.estado == "Eliminado" || (cobro.fechapagada.HasValue && cobro.fechapagada.Value < DateTime.Now))
+            {
+                TempData["ErrorMessage"] = "No se puede consultar este cobro debido a su estado o fecha de pago.";
+                return RedirectToAction("Index", "Cobros");  // Redirigir si el estado es "Eliminado" o la fecha de pago es menor a la actual
             }
 
             // Crear el modelo de vista para la acción
